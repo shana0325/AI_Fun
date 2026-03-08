@@ -129,6 +129,10 @@ Example `/ask` request body:
 - Assistant answer is shown with `Sources`
 - Each source can be expanded to view original retrieved chunk text
 
+UI Example:
+
+![AI Knowledge Assistant UI](docs/images/ui_demo.png)
+
 ---
 
 ## Notes

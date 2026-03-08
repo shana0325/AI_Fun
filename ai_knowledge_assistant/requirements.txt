@@ -4,3 +4,5 @@ langchain
 faiss-cpu
 pypdf
 streamlit
+sentence-transformers
+faiss-cpu

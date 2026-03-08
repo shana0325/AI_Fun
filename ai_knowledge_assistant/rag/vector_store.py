@@ -1,43 +1,98 @@
-"""In-memory vector store for RAG."""
+# """In-memory vector store for RAG."""
+#
+# from __future__ import annotations
+#
+# from dataclasses import dataclass
+#
+# from ai_knowledge_assistant.rag.embedding import cosine_similarity, hash_embedding
+#
+#
+# @dataclass(frozen=True)
+# class VectorSearchResult:
+#     text: str
+#     score: float
+#
+#
+# class InMemoryVectorStore:
+#     """Simple vector store using hash embedding and cosine similarity."""
+#
+#     def __init__(self, dims: int = 128) -> None:
+#         if dims <= 0:
+#             raise ValueError("dims must be > 0")
+#         self._dims = dims
+#         self._texts: list[str] = []
+#         self._vectors: list[list[float]] = []
+#
+#     def add_texts(self, texts: list[str]) -> None:
+#         for text in texts:
+#             self._texts.append(text)
+#             self._vectors.append(hash_embedding(text, dims=self._dims))
+#
+#     def similarity_search(self, query: str, top_k: int = 3) -> list[VectorSearchResult]:
+#         if top_k <= 0:
+#             raise ValueError("top_k must be > 0")
+#         if not self._texts:
+#             return []
+#
+#         query_vec = hash_embedding(query, dims=self._dims)
+#         scored = [
+#             VectorSearchResult(text=text, score=cosine_similarity(query_vec, vec))
+#             for text, vec in zip(self._texts, self._vectors)
+#         ]
+#         scored.sort(key=lambda item: item.score, reverse=True)
+#         return scored[:top_k]
 
-from __future__ import annotations
-
-from dataclasses import dataclass
-
-from ai_knowledge_assistant.rag.embedding import cosine_similarity, hash_embedding
+from sentence_transformers import SentenceTransformer
+import faiss
+import numpy as np
 
 
-@dataclass(frozen=True)
-class VectorSearchResult:
-    text: str
-    score: float
+class VectorStore:
 
+    def __init__(self, model_name="BAAI/bge-base-en-v1.5"):
 
-class InMemoryVectorStore:
-    """Simple vector store using hash embedding and cosine similarity."""
+        print("Loading embedding model...")
 
-    def __init__(self, dims: int = 128) -> None:
-        if dims <= 0:
-            raise ValueError("dims must be > 0")
-        self._dims = dims
-        self._texts: list[str] = []
-        self._vectors: list[list[float]] = []
+        self.model = SentenceTransformer(model_name)
 
-    def add_texts(self, texts: list[str]) -> None:
-        for text in texts:
-            self._texts.append(text)
-            self._vectors.append(hash_embedding(text, dims=self._dims))
+        self.index = None
+        self.chunks = []
 
-    def similarity_search(self, query: str, top_k: int = 3) -> list[VectorSearchResult]:
-        if top_k <= 0:
-            raise ValueError("top_k must be > 0")
-        if not self._texts:
-            return []
+    def build_index(self, chunks: list[str]):
+        """
+        构建向量索引
+        """
 
-        query_vec = hash_embedding(query, dims=self._dims)
-        scored = [
-            VectorSearchResult(text=text, score=cosine_similarity(query_vec, vec))
-            for text, vec in zip(self._texts, self._vectors)
-        ]
-        scored.sort(key=lambda item: item.score, reverse=True)
-        return scored[:top_k]
+        self.chunks = chunks
+
+        print("Generating embeddings...")
+
+        embeddings = self.model.encode(chunks)
+
+        embeddings = np.array(embeddings).astype("float32")
+
+        dimension = embeddings.shape[1]
+
+        self.index = faiss.IndexFlatL2(dimension)
+
+        self.index.add(embeddings)
+
+        print(f"Index built with {len(chunks)} chunks")
+
+    def search(self, query: str, top_k: int = 3):
+        """
+        语义检索
+        """
+
+        query_embedding = self.model.encode([query])
+
+        query_embedding = np.array(query_embedding).astype("float32")
+
+        distances, indices = self.index.search(query_embedding, top_k)
+
+        results = []
+
+        for idx in indices[0]:
+            results.append(self.chunks[idx])
+
+        return results

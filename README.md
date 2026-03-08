@@ -1,51 +1,40 @@
 # AI Knowledge Assistant
 
-An AI-powered knowledge assistant built with **RAG (Retrieval-Augmented Generation)** and **LLM APIs**.
-The system can ingest documents, retrieve relevant context using vector search, and generate grounded answers with a large language model.
-
-This project demonstrates how to build a practical **LLM application system**, including document processing, semantic retrieval, and agent-based tool execution.
+A practical RAG (Retrieval-Augmented Generation) project with FastAPI backend + Streamlit frontend.
+It supports multi-document upload, semantic retrieval, and grounded answer generation with DeepSeek API.
 
 ---
 
 ## Features
 
-* Document question answering using RAG
-* Multi-document knowledge retrieval
-* Context-aware answer generation
-* Modular architecture for LLM applications
-* Extensible agent tools for advanced tasks
-
-Current MVP also includes:
-
-* Text chunking + hash embedding + cosine Top-K retrieval
-* `search_knowledge` tool with `AgentExecutor` orchestration
-* Streamlit demo page and CLI entrypoint
-* Local `SimpleLLMClient` stub for offline runnable flow
+- Multi-document upload (`txt` / `pdf`) and incremental indexing
+- RAG flow: document loading -> chunking -> embedding/indexing -> retrieval -> LLM answer
+- Source tracing: show retrieved source chunks in UI (click to expand)
+- FastAPI endpoints for upload and ask
+- Streamlit chat UI for interactive QA
+- Local evaluation assets (`data/rag_test_*`) for quick testing
 
 ---
 
 ## Architecture
 
-The system follows a standard RAG pipeline:
-
-User Query
--> Retriever (Vector Search)
--> Context Construction
--> LLM Generation
--> Final Answer
-
-Future extensions will include richer tool-calling agents and expanded web interfaces.
+User Query  
+-> Vector Retrieval (FAISS + sentence-transformers)  
+-> Context Assembly (Top-K chunks with source)  
+-> DeepSeek LLM Generation  
+-> Final Answer + Sources
 
 ---
 
 ## Tech Stack
 
-* Python
-* DeepSeek API (LLM)
-* LangChain
-* FAISS (Vector Database)
-* Streamlit (Frontend)
-* FastAPI (Backend)
+- Python
+- FastAPI + Uvicorn
+- Streamlit
+- sentence-transformers
+- FAISS
+- OpenAI SDK (DeepSeek-compatible API)
+- python-dotenv / requests / pypdf
 
 ---
 
@@ -53,15 +42,15 @@ Future extensions will include richer tool-calling agents and expanded web inter
 
 ```text
 ai_knowledge_assistant
-|-- agent
-|   |-- tools.py
-|   `-- agent_executor.py
 |-- api
 |   `-- server.py
+|-- service
+|   `-- qa_service.py
 |-- rag
 |   |-- document_loader.py
 |   |-- text_splitter.py
-|   `-- vector_store.py
+|   |-- vector_store.py
+|   `-- rag_pipeline.py
 |-- llm
 |   `-- llm_client.py
 |-- frontend
@@ -69,59 +58,49 @@ ai_knowledge_assistant
 |   `-- streamlit_app.py
 |-- app
 |   `-- main.py
-|-- service
-|   `-- qa_service.py
 `-- tests
 
 data
 |-- example.txt
-`-- knowledge.txt
+|-- knowledge.txt
+|-- rag_test_questions.txt
+|-- rag_test_eval.jsonl
+`-- rag_test_docs/
 
 requirements.txt
+README.md
+ARCHITECTURE.md
 ```
 
 ---
 
 ## Installation
 
-Create a conda environment:
-
 ```bash
 conda create -n ai-rag python=3.10
 conda activate ai-rag
-```
-
-Install dependencies:
-
-```bash
 pip install -r requirements.txt
 ```
 
-Create `.env` file:
+Create `.env` in project root:
 
-```bash
+```env
 DEEPSEEK_API_KEY=your_api_key
 ```
 
 ---
 
-## Usage
+## Run
 
-Run the main application (CLI):
+Run from project root in **two terminals**.
 
-```bash
-python -m ai_knowledge_assistant.app.main --question "What is the core RAG flow?" --top-k 3
-```
-
-Run Web App (FastAPI + Streamlit, in two terminals from project root):
-
-Terminal 1 (start backend API):
+Terminal 1 (backend):
 
 ```bash
 uvicorn ai_knowledge_assistant.api.server:app --reload
 ```
 
-Terminal 2 (start frontend UI):
+Terminal 2 (frontend):
 
 ```bash
 streamlit run ai_knowledge_assistant/frontend/app.py
@@ -129,12 +108,30 @@ streamlit run ai_knowledge_assistant/frontend/app.py
 
 ---
 
-## Roadmap
+## API Endpoints
 
-* [x] Basic RAG pipeline
-* [x] Vector database-style retrieval flow (in-memory MVP)
-* [x] Agent tool execution
-* [x] Web interface (Streamlit MVP)
-* [ ] Multi-document comparison
-* [ ] DeepSeek API integration
-* [ ] FastAPI backend service
+- `GET /` : health check
+- `POST /upload` : upload and index one document
+- `POST /ask` : ask question, returns `answer` + `sources`
+
+Example `/ask` request body:
+
+```json
+{"question": "What is RAG?"}
+```
+
+---
+
+## UI Behavior
+
+- Upload documents in sidebar
+- Ask question in chat
+- Assistant answer is shown with `Sources`
+- Each source can be expanded to view original retrieved chunk text
+
+---
+
+## Notes
+
+- If frontend reports connection refused to `127.0.0.1:8000`, backend is not running or failed on startup.
+- If backend fails at startup, check `.env` and dependencies first.

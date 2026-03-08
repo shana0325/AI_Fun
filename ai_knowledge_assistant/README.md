@@ -1,49 +1,51 @@
 # AI Knowledge Assistant (MVP)
 
-这是一个“可运行最小版本”示例，覆盖了一个基础 AI 知识助手闭环：
+A runnable minimal RAG + Agent project that demonstrates:
 
-1. 文本切分（`rag/chunking.py`）
-2. 向量化（`rag/embedding.py`）
-3. 检索（`rag/retriever.py`）
-4. Agent 编排（`agent/agent_executor.py`）
-5. 本地 LLM Stub 生成回答（`llm/llm_client.py`）
-6. CLI 入口 + Streamlit 页面
+- Text chunking
+- Hash embedding
+- Cosine-similarity retrieval with Top-K results
+- Agent orchestration with `search_knowledge`
+- Local LLM stub answer generation (no external model API)
 
-## 目录
-
-```text
-ai_knowledge_assistant/
-├── app/main.py
-├── rag/{chunking.py,embedding.py,retriever.py}
-├── agent/{tools.py,agent_executor.py}
-├── llm/llm_client.py
-├── frontend/streamlit_app.py
-└── tests/test_rag_flow.py
-```
-
-## 快速开始
+## Install
 
 ```bash
-cd ai_knowledge_assistant
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r ai_knowledge_assistant/requirements.txt
 ```
 
-### 运行 CLI
+## Default knowledge source
+
+The project now uses `ai_knowledge_assistant/data/knowledge.txt` as the default knowledge base.
+
+## CLI
 
 ```bash
-PYTHONPATH=.. python app/main.py "RAG 的核心流程是什么？"
+python -m ai_knowledge_assistant.app.main --question "What is the core RAG flow?" --top-k 3
 ```
 
-### 运行测试
+Optional flags:
+
+- `--knowledge-file`: custom local text file path
+- `--chunk-size`: chunk size (default: 180)
+- `--overlap`: chunk overlap (default: 30)
+
+## Streamlit UI
 
 ```bash
-PYTHONPATH=.. pytest -q
+streamlit run ai_knowledge_assistant/frontend/streamlit_app.py
 ```
 
-### 运行 Streamlit
+The page supports question input, Top-K selection, and answer display.
+
+## Tests
 
 ```bash
-PYTHONPATH=.. streamlit run frontend/streamlit_app.py
+pytest -q
 ```
+
+Coverage includes:
+
+- chunking behavior
+- retriever ranking
+- end-to-end agent output

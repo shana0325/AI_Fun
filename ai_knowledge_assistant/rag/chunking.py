@@ -1,33 +1,31 @@
-"""Chunking utilities for the RAG flow."""
+"""Chunking utilities for RAG."""
 
 from __future__ import annotations
 
 
-def chunk_text(text: str, chunk_size: int = 160, overlap: int = 20) -> list[str]:
-    """Split text into overlapping chunks.
+def chunk_text(text: str, chunk_size: int = 300, overlap: int = 50) -> list[str]:
+    """Split text into overlapped chunks by character length."""
+    if chunk_size <= 0:
+        raise ValueError("chunk_size must be > 0")
+    if overlap < 0:
+        raise ValueError("overlap must be >= 0")
+    if overlap >= chunk_size:
+        raise ValueError("overlap must be smaller than chunk_size")
 
-    Args:
-        text: Raw text to split.
-        chunk_size: Max characters in each chunk.
-        overlap: Characters to overlap between consecutive chunks.
-
-    Returns:
-        A list of non-empty chunks.
-    """
     normalized = " ".join(text.split())
     if not normalized:
         return []
-    if chunk_size <= 0:
-        raise ValueError("chunk_size must be positive")
-    if overlap < 0 or overlap >= chunk_size:
-        raise ValueError("overlap must be >= 0 and < chunk_size")
 
-    step = chunk_size - overlap
     chunks: list[str] = []
+    start = 0
+    step = chunk_size - overlap
+    length = len(normalized)
 
-    for start in range(0, len(normalized), step):
-        chunk = normalized[start : start + chunk_size].strip()
-        if chunk:
-            chunks.append(chunk)
+    while start < length:
+        end = min(start + chunk_size, length)
+        chunks.append(normalized[start:end].strip())
+        if end >= length:
+            break
+        start += step
 
     return chunks

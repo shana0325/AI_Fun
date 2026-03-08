@@ -1,23 +1,20 @@
-"""LLM client abstraction used by the agent."""
+"""LLM client abstraction."""
 
 from __future__ import annotations
 
+from ai_knowledge_assistant.rag.retriever import RetrievalResult
+
 
 class SimpleLLMClient:
-    """A tiny local stub that formats a final answer.
+    """Local deterministic LLM stub that synthesizes an answer from context."""
 
-    This is intentionally deterministic and does not call external APIs,
-    making the starter project runnable out of the box.
-    """
-
-    def generate_answer(self, query: str, contexts: list[str]) -> str:
-        """Generate a simple answer from retrieved contexts."""
+    def generate_answer(self, question: str, contexts: list[RetrievalResult]) -> str:
         if not contexts:
-            return f"未找到相关知识。你的问题是：{query}"
+            return f"Question: {question}\n\nNo relevant knowledge was retrieved."
 
-        bullets = "\n".join(f"- {text}" for text in contexts[:3])
-        return (
-            f"问题：{query}\n"
-            "根据检索到的知识，我建议你先关注以下内容：\n"
-            f"{bullets}"
-        )
+        lines = [f"Question: {question}", "", "Based on retrieved knowledge:"]
+        for idx, ctx in enumerate(contexts, start=1):
+            lines.append(f"{idx}. (score={ctx.score:.3f}) {ctx.text}")
+        lines.append("")
+        lines.append("Conclusion: these are the most relevant chunks for this question.")
+        return "\n".join(lines)

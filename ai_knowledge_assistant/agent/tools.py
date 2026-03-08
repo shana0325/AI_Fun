@@ -1,14 +1,10 @@
-"""Agent tools for knowledge search."""
+"""Agent tool definitions."""
 
 from __future__ import annotations
 
-from ai_knowledge_assistant.rag.chunking import chunk_text
-from ai_knowledge_assistant.rag.retriever import RetrievedChunk, retrieve_top_k
+from ai_knowledge_assistant.rag.retriever import RetrievalResult, SimpleRetriever
 
 
-def search_knowledge(query: str, documents: list[str], k: int = 3) -> list[RetrievedChunk]:
-    """Search documents and return top-k chunks."""
-    all_chunks: list[str] = []
-    for doc in documents:
-        all_chunks.extend(chunk_text(doc))
-    return retrieve_top_k(query=query, chunks=all_chunks, k=k)
+def search_knowledge(query: str, retriever: SimpleRetriever, top_k: int = 3) -> list[RetrievalResult]:
+    """Tool: retrieve top-k relevant chunks."""
+    return retriever.search(query=query, top_k=top_k)

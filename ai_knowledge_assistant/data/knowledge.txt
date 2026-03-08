@@ -1,0 +1,6 @@
+RAG (Retrieval-Augmented Generation) retrieves external knowledge before generating a final answer.
+A minimal RAG flow usually includes: chunking documents, embedding chunks, retrieving top-k chunks, and composing an answer from context.
+Chunking improves retrieval granularity and helps avoid semantic dilution from very long documents.
+Hash-based embedding is lightweight, deterministic, and works without external model APIs.
+Cosine similarity is commonly used to rank retrieved chunks by vector similarity.
+Agents can orchestrate retrieval tools and pass selected context to an LLM for grounded responses.

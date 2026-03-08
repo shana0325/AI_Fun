@@ -48,7 +48,7 @@ import numpy as np
 
 
 class VectorStore:
-
+    # 加载 embedding 模型，并初始化向量索引容器。
     def __init__(self, model_name="BAAI/bge-base-en-v1.5"):
 
         print("Loading embedding model...")
@@ -58,6 +58,7 @@ class VectorStore:
         self.index = None
         self.chunks = []
 
+    # 为 chunks 生成向量，并构建 FAISS 索引。
     def build_index(self, chunks: list[str]):
         """
         构建向量索引
@@ -79,6 +80,7 @@ class VectorStore:
 
         print(f"Index built with {len(chunks)} chunks")
 
+    # 对查询做向量检索，返回最相关的 top_k 原文片段。
     def search(self, query: str, top_k: int = 3):
         """
         语义检索

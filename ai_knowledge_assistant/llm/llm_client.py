@@ -9,6 +9,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 
 
+# 历史本地 Stub 实现保留在注释中，便于离线模式回退。
 # class SimpleLLMClient:
 #     """Local deterministic LLM stub that synthesizes an answer from context."""
 #
@@ -25,6 +26,7 @@ from dotenv import load_dotenv
 
 
 class LLMClient:
+    # 初始化：加载 .env，读取 DeepSeek Key，构造 OpenAI 兼容客户端。
     def __init__(self):
         # 加载环境变量
         load_dotenv()
@@ -42,6 +44,7 @@ class LLMClient:
 
         self.model = "deepseek-chat"
 
+    # 发送提示词到大模型并返回最终文本。
     def ask(self, prompt: str) -> str:
         """
         向 LLM 发送问题并返回回答

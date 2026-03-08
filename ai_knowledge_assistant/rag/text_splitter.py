@@ -35,12 +35,14 @@
 #         chunks.extend(split_text(doc, chunk_size=chunk_size, overlap=overlap))
 #     return chunks
 
-class TextSplitter:
 
+class TextSplitter:
+    # 初始化切块参数：每块长度 + 相邻块重叠长度。
     def __init__(self, chunk_size=500, chunk_overlap=100):
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
 
+    # 按固定窗口切分文本，输出用于向量化检索的 chunks。
     def split_text(self, text: str):
 
         chunks = []
@@ -49,13 +51,15 @@ class TextSplitter:
         text_length = len(text)
 
         while start < text_length:
-
+            # 当前窗口结束位置。
             end = start + self.chunk_size
 
+            # 切出一个 chunk。
             chunk = text[start:end]
 
             chunks.append(chunk)
 
+            # 下一个窗口起点 = 当前起点 + 有效步长（考虑 overlap）。
             start += self.chunk_size - self.chunk_overlap
 
         return chunks

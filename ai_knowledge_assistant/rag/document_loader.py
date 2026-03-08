@@ -1,5 +1,6 @@
 """Document loading utilities for RAG."""
 
+# 历史版本的示例实现保留在注释中，便于对比演进。
 # from __future__ import annotations
 #
 # from pathlib import Path
@@ -19,13 +20,12 @@
 #     """Load multiple text documents and return raw text list."""
 #     return [load_text_file(path) for path in paths]
 
-
 from pathlib import Path
 from pypdf import PdfReader
 
 
 class DocumentLoader:
-
+    # 读取 txt 文件并返回全文字符串。
     def load_txt(self, file_path: str) -> str:
         """
         读取 txt 文件
@@ -33,6 +33,7 @@ class DocumentLoader:
         with open(file_path, "r", encoding="utf-8") as f:
             return f.read()
 
+    # 逐页读取 PDF，并把每页文本拼接为一个字符串。
     def load_pdf(self, file_path: str) -> str:
         """
         读取 PDF 文件
@@ -46,6 +47,7 @@ class DocumentLoader:
 
         return text
 
+    # 按文件后缀自动分发到对应加载函数。
     def load(self, file_path: str) -> str:
         """
         自动识别文件类型

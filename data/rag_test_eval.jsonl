@@ -1,0 +1,10 @@
+{"id": 1, "question": "RAG 的典型流程包含哪些步骤？", "expected_answer": "RAG 的典型流程包括文档切分、向量化、相似度检索、拼接上下文、调用大模型生成答案。"}
+{"id": 2, "question": "在生产中，常见的检索 Top-K 范围是什么？", "expected_answer": "常见的检索 Top-K 范围是 Top-3 到 Top-5。"}
+{"id": 3, "question": "FAISS 适合什么类型的场景？", "expected_answer": "FAISS 适合中小规模实验与原型验证的本地向量检索场景。"}
+{"id": 4, "question": "为什么要设置 chunk_overlap？", "expected_answer": "设置 chunk_overlap 是为了保留相邻文本块的上下文连续性，减少语义断裂。"}
+{"id": 5, "question": "chunk_size 太小和太大分别可能带来什么问题？", "expected_answer": "chunk_size 太小可能导致语义不完整，太大可能引入噪声并降低检索精度。"}
+{"id": 6, "question": "多文档问答时，系统如何组织检索与生成？", "expected_answer": "系统会先从多个文档检索相关片段，再将这些上下文统一提供给 LLM 生成最终答案。"}
+{"id": 7, "question": "如何在提示词中降低模型幻觉？", "expected_answer": "可在提示词中明确要求模型仅基于提供的上下文回答，以降低幻觉风险。"}
+{"id": 8, "question": "当检索不到相关内容时，系统应该如何回应？", "expected_answer": "当检索不到相关内容时，系统应返回不确定或提示用户补充信息。"}
+{"id": 9, "question": "一个最小可用 RAG Web 应用常见的后端和前端组合是什么？", "expected_answer": "常见组合是 FastAPI 作为后端接口层，Streamlit 作为前端交互层。"}
+{"id": 10, "question": "本地开发中为什么常用 uvicorn --reload？", "expected_answer": "因为它可以在代码变更后自动重启服务，提升本地开发调试效率。"}

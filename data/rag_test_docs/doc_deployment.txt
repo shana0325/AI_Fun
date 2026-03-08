@@ -1,0 +1,3 @@
+部署一个最小可用 RAG Web 应用时，常见组合是 FastAPI + Streamlit。
+FastAPI 提供上传文档与问答接口，Streamlit 提供交互页面。
+本地开发通常使用 uvicorn --reload 以便代码改动后自动重启服务。

@@ -29,14 +29,10 @@ Current MVP also includes:
 The system follows a standard RAG pipeline:
 
 User Query
-¡ý
-Retriever (Vector Search)
-¡ý
-Context Construction
-¡ý
-LLM Generation
-¡ý
-Final Answer
+-> Retriever (Vector Search)
+-> Context Construction
+-> LLM Generation
+-> Final Answer
 
 Future extensions will include richer tool-calling agents and expanded web interfaces.
 
@@ -57,31 +53,23 @@ Future extensions will include richer tool-calling agents and expanded web inter
 
 ```text
 ai_knowledge_assistant
-©¦
-©À©¤©¤ agent
-©¦   ©À©¤©¤ tools.py
-©¦   ©¸©¤©¤ agent_executor.py
-©¦
-©À©¤©¤ rag
-©¦   ©À©¤©¤ document_loader.py
-©¦   ©À©¤©¤ text_splitter.py
-©¦   ©¸©¤©¤ vector_store.py
-©¦
-©À©¤©¤ llm
-©¦   ©¸©¤©¤ llm_client.py
-©¦
-©À©¤©¤ frontend
-©¦   ©¸©¤©¤ streamlit_app.py
-©¦
-©À©¤©¤ app
-©¦   ©¸©¤©¤ main.py
-©¦
-©À©¤©¤ data
-©¦   ©¸©¤©¤ knowledge.txt
-©¦
-©À©¤©¤ tests
-©¦
-©¸©¤©¤ requirements.txt
+|-- agent
+|   |-- tools.py
+|   `-- agent_executor.py
+|-- rag
+|   |-- document_loader.py
+|   |-- text_splitter.py
+|   `-- vector_store.py
+|-- llm
+|   `-- llm_client.py
+|-- frontend
+|   `-- streamlit_app.py
+|-- app
+|   `-- main.py
+|-- data
+|   `-- knowledge.txt
+|-- tests
+`-- requirements.txt
 ```
 
 ---

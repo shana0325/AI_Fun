@@ -1,2 +1,6 @@
-pytest>=8.0.0
-streamlit>=1.30.0
+﻿openai
+python-dotenv
+langchain
+faiss-cpu
+pypdf
+streamlit

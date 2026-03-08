@@ -9,7 +9,7 @@ from ai_knowledge_assistant.agent.agent_executor import AgentExecutor
 from ai_knowledge_assistant.rag.chunking import chunk_text
 from ai_knowledge_assistant.rag.retriever import SimpleRetriever
 
-DEFAULT_KNOWLEDGE_FILE = Path(__file__).resolve().parents[1] / "data" / "knowledge.txt"
+DEFAULT_KNOWLEDGE_FILE = Path(__file__).resolve().parents[2] / "data" / "knowledge.txt"
 
 
 def build_executor(knowledge_text: str, chunk_size: int = 180, overlap: int = 30, dims: int = 128) -> AgentExecutor:

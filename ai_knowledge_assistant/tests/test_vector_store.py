@@ -7,7 +7,7 @@ from ai_knowledge_assistant.rag.vector_store import VectorStore
 
 def main():
     # 读取并切分文档。
-    project_root = Path(__file__).resolve().parent.parent
+    project_root = Path(__file__).resolve().parents[2]
     file_path = project_root / "data" / "example.txt"
 
     loader = DocumentLoader()

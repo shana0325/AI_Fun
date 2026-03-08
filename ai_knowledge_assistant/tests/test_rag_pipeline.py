@@ -8,7 +8,7 @@ from ai_knowledge_assistant.rag.rag_pipeline import RAGPipeline
 
 def main():
     # 数据准备：加载文本并切块。
-    project_root = Path(__file__).resolve().parent.parent
+    project_root = Path(__file__).resolve().parents[2]
     file_path = project_root / "data" / "example.txt"
 
     loader = DocumentLoader()

@@ -6,7 +6,7 @@ from ai_knowledge_assistant.rag.text_splitter import TextSplitter
 
 def main():
     # 读取示例文本。
-    project_root = Path(__file__).resolve().parent.parent
+    project_root = Path(__file__).resolve().parents[2]
     file_path = project_root / "data" / "example.txt"
 
     loader = DocumentLoader()

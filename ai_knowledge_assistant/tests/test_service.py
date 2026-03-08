@@ -5,7 +5,7 @@ from ai_knowledge_assistant.service.qa_service import QAService
 
 def main():
     # 计算项目根目录下示例数据路径。
-    project_root = Path(__file__).resolve().parent.parent
+    project_root = Path(__file__).resolve().parents[2]
     file_path = project_root / "data" / "example.txt"
 
     # 初始化服务并构建索引。

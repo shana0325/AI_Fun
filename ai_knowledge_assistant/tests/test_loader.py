@@ -7,7 +7,7 @@ def main():
     loader = DocumentLoader()
 
     # 计算示例文本路径（相对项目根目录）。
-    project_root = Path(__file__).resolve().parent.parent
+    project_root = Path(__file__).resolve().parents[2]
     file_path = project_root / "data" / "example.txt"
 
     # 读取文档并打印前 500 字用于人工检查。

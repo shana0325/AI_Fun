@@ -41,19 +41,26 @@ async def upload_document(file: UploadFile = File(...)):
         f.write(content)
 
     # 上传后立刻重建索引。
-    qa_service.build_index(str(file_path))
+    # qa_service.build_index(str(file_path))
+
+    # 上传后不重建而是增加索引。
+    qa_service.add_document(file_path)
 
     return {"status": "document uploaded and indexed"}
 
 
-# 问答接口：基于已构建索引进行 RAG 回答。
+# 问答接口：基于已构建索引进行 RAG 回答
 @app.post("/ask")
 def ask_question(request: AskRequest):
 
+    # 调用 QAService 执行 RAG 问答
+    # answer：LLM生成的回答
+    # contexts：检索到的文本片段（包含 source 信息）
     answer, contexts = qa_service.ask(request.question)
 
+    # 返回回答 + 来源信息
     return {
         "question": request.question,
         "answer": answer,
-        "contexts": contexts
+        "sources": contexts
     }

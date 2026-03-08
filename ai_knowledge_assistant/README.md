@@ -1,51 +1,136 @@
-# AI Knowledge Assistant (MVP)
+# AI Knowledge Assistant
 
-A runnable minimal RAG + Agent project that demonstrates:
+An AI-powered knowledge assistant built with **RAG (Retrieval-Augmented Generation)** and **LLM APIs**.
+The system can ingest documents, retrieve relevant context using vector search, and generate grounded answers with a large language model.
 
-- Text chunking
-- Hash embedding
-- Cosine-similarity retrieval with Top-K results
-- Agent orchestration with `search_knowledge`
-- Local LLM stub answer generation (no external model API)
+This project demonstrates how to build a practical **LLM application system**, including document processing, semantic retrieval, and agent-based tool execution.
 
-## Install
+---
 
-```bash
-pip install -r ai_knowledge_assistant/requirements.txt
+## Features
+
+* Document question answering using RAG
+* Multi-document knowledge retrieval
+* Context-aware answer generation
+* Modular architecture for LLM applications
+* Extensible agent tools for advanced tasks
+
+Current MVP also includes:
+
+* Text chunking + hash embedding + cosine Top-K retrieval
+* `search_knowledge` tool with `AgentExecutor` orchestration
+* Streamlit demo page and CLI entrypoint
+* Local `SimpleLLMClient` stub for offline runnable flow
+
+---
+
+## Architecture
+
+The system follows a standard RAG pipeline:
+
+User Query
+¡ý
+Retriever (Vector Search)
+¡ý
+Context Construction
+¡ý
+LLM Generation
+¡ý
+Final Answer
+
+Future extensions will include richer tool-calling agents and expanded web interfaces.
+
+---
+
+## Tech Stack
+
+* Python
+* DeepSeek API (LLM)
+* LangChain
+* FAISS (Vector Database)
+* Streamlit (Frontend)
+* FastAPI (Backend)
+
+---
+
+## Project Structure
+
+```text
+ai_knowledge_assistant
+©¦
+©À©¤©¤ agent
+©¦   ©À©¤©¤ tools.py
+©¦   ©¸©¤©¤ agent_executor.py
+©¦
+©À©¤©¤ rag
+©¦   ©À©¤©¤ document_loader.py
+©¦   ©À©¤©¤ text_splitter.py
+©¦   ©¸©¤©¤ vector_store.py
+©¦
+©À©¤©¤ llm
+©¦   ©¸©¤©¤ llm_client.py
+©¦
+©À©¤©¤ frontend
+©¦   ©¸©¤©¤ streamlit_app.py
+©¦
+©À©¤©¤ app
+©¦   ©¸©¤©¤ main.py
+©¦
+©À©¤©¤ data
+©¦   ©¸©¤©¤ knowledge.txt
+©¦
+©À©¤©¤ tests
+©¦
+©¸©¤©¤ requirements.txt
 ```
 
-## Default knowledge source
+---
 
-The project now uses `ai_knowledge_assistant/data/knowledge.txt` as the default knowledge base.
+## Installation
 
-## CLI
+Create a conda environment:
+
+```bash
+conda create -n ai-rag python=3.10
+conda activate ai-rag
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Create `.env` file:
+
+```bash
+DEEPSEEK_API_KEY=your_api_key
+```
+
+---
+
+## Usage
+
+Run the main application (CLI):
 
 ```bash
 python -m ai_knowledge_assistant.app.main --question "What is the core RAG flow?" --top-k 3
 ```
 
-Optional flags:
-
-- `--knowledge-file`: custom local text file path
-- `--chunk-size`: chunk size (default: 180)
-- `--overlap`: chunk overlap (default: 30)
-
-## Streamlit UI
+Run Streamlit UI:
 
 ```bash
 streamlit run ai_knowledge_assistant/frontend/streamlit_app.py
 ```
 
-The page supports question input, Top-K selection, and answer display.
+---
 
-## Tests
+## Roadmap
 
-```bash
-pytest -q
-```
-
-Coverage includes:
-
-- chunking behavior
-- retriever ranking
-- end-to-end agent output
+* [x] Basic RAG pipeline
+* [x] Vector database-style retrieval flow (in-memory MVP)
+* [x] Agent tool execution
+* [x] Web interface (Streamlit MVP)
+* [ ] Multi-document comparison
+* [ ] DeepSeek API integration
+* [ ] FastAPI backend service

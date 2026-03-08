@@ -6,3 +6,7 @@ pypdf
 streamlit
 sentence-transformers
 faiss-cpu
+fastapi
+uvicorn
+requests
+python-multipart

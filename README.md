@@ -56,6 +56,8 @@ ai_knowledge_assistant
 |-- agent
 |   |-- tools.py
 |   `-- agent_executor.py
+|-- api
+|   `-- server.py
 |-- rag
 |   |-- document_loader.py
 |   |-- text_splitter.py
@@ -63,13 +65,19 @@ ai_knowledge_assistant
 |-- llm
 |   `-- llm_client.py
 |-- frontend
+|   |-- app.py
 |   `-- streamlit_app.py
 |-- app
 |   `-- main.py
-|-- data
-|   `-- knowledge.txt
-|-- tests
-`-- requirements.txt
+|-- service
+|   `-- qa_service.py
+`-- tests
+
+data
+|-- example.txt
+`-- knowledge.txt
+
+requirements.txt
 ```
 
 ---
@@ -105,10 +113,18 @@ Run the main application (CLI):
 python -m ai_knowledge_assistant.app.main --question "What is the core RAG flow?" --top-k 3
 ```
 
-Run Streamlit UI:
+Run Web App (FastAPI + Streamlit, in two terminals from project root):
+
+Terminal 1 (start backend API):
 
 ```bash
-streamlit run ai_knowledge_assistant/frontend/streamlit_app.py
+uvicorn ai_knowledge_assistant.api.server:app --reload
+```
+
+Terminal 2 (start frontend UI):
+
+```bash
+streamlit run ai_knowledge_assistant/frontend/app.py
 ```
 
 ---
